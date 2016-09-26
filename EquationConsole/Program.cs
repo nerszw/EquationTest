@@ -11,7 +11,7 @@ namespace EquationConsole
 {
     class Program
     {
-        static string ConvertEquation(string eq)
+        static string GetEquation(string eq)
         {
             try
             {
@@ -34,7 +34,7 @@ namespace EquationConsole
                     Console.WriteLine("File mode => " + args[0]);
 
                     var lines = File.ReadAllLines(args[0]);
-                    var canons = lines.Select(x => ConvertEquation(x));
+                    var canons = lines.Select(x => GetEquation(x));
                     File.WriteAllLines(args[0] + ".out", canons);
                 }
                 else
@@ -47,7 +47,7 @@ namespace EquationConsole
                         var equation = Console.ReadLine();
 
                         Console.WriteLine("Canonical form: ");
-                        Console.WriteLine(Equation.ToCanonicalForm(equation));
+                        Console.WriteLine(GetEquation(equation));
                     }
                 }
             }
