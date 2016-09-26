@@ -4,25 +4,57 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-using System.Text.RegularExpressions;
 using EquationLibrary;
+
 
 namespace EquationConsole
 {
     class Program
     {
+        static string ConvertEquation(string eq)
+        {
+            try
+            {
+                return Equation.ToCanonicalForm(eq);
+            }
+            catch (Exception exc)
+            {
+                return exc.Message;
+            }
+        }
+
         static void Main(string[] args)
         {
-            var equation = "2x ^ 2xy + x (3.5 xy + y) = y^2 - xy + y y";
-            //canon: 2 x y + 3.5 x^2 y + 2 x^3 y - 2 y^2 = 0
-
-            Console.WriteLine("in: " + equation);
-            Console.WriteLine("out: " + Equation.ToCanonicalForm(equation));
-
-            while (true)
+            bool withFile = args.Length > 0 && File.Exists(args[0]);
+            
+            try
             {
-                var eq = Equation.ToCanonicalForm(Console.ReadLine());
-                Console.WriteLine(eq);
+                if (withFile)
+                {
+                    Console.WriteLine("File mode => " + args[0]);
+
+                    var lines = File.ReadAllLines(args[0]);
+                    var canons = lines.Select(x => ConvertEquation(x));
+                    File.WriteAllLines(args[0] + ".out", canons);
+                }
+                else
+                {
+                    Console.WriteLine("Console mode ");
+
+                    while (true)
+                    {
+                        Console.WriteLine("Write equation: ");
+                        var equation = Console.ReadLine();
+
+                        Console.WriteLine("Canonical form: ");
+                        Console.WriteLine(Equation.ToCanonicalForm(equation));
+                    }
+                }
+            }
+            catch (Exception exc)
+            {
+                Console.WriteLine(exc.Message);
+                Console.ReadKey();
             }
         }
     }
