@@ -107,7 +107,7 @@ namespace EquationLibrary
                 throw new FormatException(message);
             }
 
-            return result.Cast<IToken>().ToList();
+            return result;
         }
     }
 }
